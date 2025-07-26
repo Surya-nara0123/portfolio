@@ -245,11 +245,11 @@ const TechnicalSkills = () => {
                 key={tech}
                 whileHover={{ 
                   scale: 1.2, 
-                  rotate: Math.random() * 20 - 10,
+                  rotate: 10,
                   backgroundColor: 'rgba(59, 130, 246, 0.2)' 
                 }}
                 className="px-4 py-2 bg-gray-800 rounded-full text-gray-300 border border-gray-600 cursor-default"
-                initial={{ opacity: 0, scale: 0, rotate: Math.random() * 360 }}
+                initial={{ opacity: 0, scale: 0, rotate: 0 }}
                 animate={isInView ? { 
                   opacity: 1, 
                   scale: 1, 
@@ -257,7 +257,7 @@ const TechnicalSkills = () => {
                 } : { 
                   opacity: 0, 
                   scale: 0, 
-                  rotate: Math.random() * 360 
+                  rotate: 0 
                 }}
                 transition={{ 
                   delay: 1.3 + index * 0.1, 

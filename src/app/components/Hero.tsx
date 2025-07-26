@@ -49,26 +49,35 @@ const Hero = () => {
           className="absolute inset-0 bg-gradient-to-br from-gray-900/20 via-gray-800/20 to-gray-700/20"
         />
         {/* Floating particles */}
-        {Array.from({ length: 50 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-gray-400/30 rounded-full"
-            animate={{
-              y: [0, -100, 0],
-              x: [0, Math.random() * 100 - 50, 0],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: Math.random() * 5 + 3,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
+        {Array.from({ length: 50 }).map((_, i) => {
+          // Pre-calculate random values to avoid hydration mismatch
+          const xMove = i % 2 === 0 ? 50 : -50;
+          const duration = 3 + (i % 5);
+          const delay = (i % 4) * 0.5;
+          const leftPos = `${(i * 2) % 100}%`;
+          const topPos = `${(i * 3) % 100}%`;
+          
+          return (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-gray-400/30 rounded-full"
+              animate={{
+                y: [0, -100, 0],
+                x: [0, xMove, 0],
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: duration,
+                repeat: Infinity,
+                delay: delay,
+              }}
+              style={{
+                left: leftPos,
+                top: topPos,
+              }}
+            />
+          );
+        })}
       </div>
 
       <motion.div
