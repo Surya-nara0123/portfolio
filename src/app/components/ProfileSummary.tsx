@@ -134,7 +134,7 @@ const ProfileSummary = () => {
   const stats = [
     {
       label: "Projects Completed",
-      value: "25+",
+      value: "5+",
       color: "from-blue-400 to-cyan-400",
     },
     {
