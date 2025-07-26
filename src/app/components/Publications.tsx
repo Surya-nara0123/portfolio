@@ -151,7 +151,7 @@ const Publications = () => {
             { label: 'Citations', value: '57', icon: '📊' },
             { label: 'H-Index', value: '3', icon: '📈' },
             { label: 'Impact Factor', value: '2.4', icon: '⭐' },
-          ].map((stat, index) => (
+          ].map((stat, _) => (
             <motion.div
               key={stat.label}
               variants={itemVariants}

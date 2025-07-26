@@ -3,11 +3,23 @@
 import { motion, useInView, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useRef, useEffect } from 'react';
 
+interface SkillItem {
+  name: string;
+  level: number;
+  icon: string;
+}
+
+interface SkillCategory {
+  category: string;
+  color: string;
+  items: SkillItem[];
+}
+
 const TechnicalSkills = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
-  const skills = [
+  const skills: SkillCategory[] = [
     {
       category: 'Frontend',
       color: 'from-blue-400 to-cyan-400',
@@ -42,7 +54,7 @@ const TechnicalSkills = () => {
       ]
     },
     {
-      category: 'DevOps & Tools',
+      category: 'DevOps',
       color: 'from-orange-400 to-red-400',
       items: [
         { name: 'Docker', level: 85, icon: '🐳' },
@@ -54,7 +66,7 @@ const TechnicalSkills = () => {
     }
   ];
 
-  const SkillBar = ({ skill, delay = 0 }: { skill: any; delay?: number }) => {
+  const SkillBar = ({ skill, delay = 0 }: { skill: SkillItem; delay?: number }) => {
     const progress = useMotionValue(0);
     const springProgress = useSpring(progress, { stiffness: 100, damping: 30 });
     const width = useTransform(springProgress, [0, 100], ['0%', '100%']);

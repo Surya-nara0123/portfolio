@@ -357,7 +357,7 @@ const Hobbies = () => {
               backgroundSize: '400% 400%',
             }}
           >
-            "The best way to predict the future is to create it, but don't forget to enjoy the journey."
+            The best way to predict the future is to create it, but dont forget to enjoy the journey.
           </motion.blockquote>
           <motion.p
             className="text-gray-500 mt-4"
