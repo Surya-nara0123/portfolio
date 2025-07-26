@@ -172,12 +172,12 @@ const ProfileSummary = () => {
   return (
     <section
       id="about"
-      className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-950 via-gray-900 to-black relative overflow-hidden"
+      className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-950/30 relative overflow-hidden"
     >
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-cyan-500/5" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 rounded-full blur-3xl" />
+      <div className="absolute inset-0" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96  rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto relative z-10" ref={ref}>
         <motion.div

@@ -124,7 +124,7 @@ const Publications = () => {
             className="text-4xl md:text-5xl font-bold mb-6"
           >
             <span className="bg-gradient-to-r from-gray-300 to-white bg-clip-text text-transparent">
-              Publications
+              Publication
             </span>
           </motion.h2>
           <motion.div
@@ -135,34 +135,8 @@ const Publications = () => {
             variants={itemVariants}
             className="text-gray-400 text-lg max-w-2xl mx-auto"
           >
-            Research papers and academic contributions to the field of computer science
+            Research paper in the field of computer science
           </motion.p>
-        </motion.div>
-
-        {/* Statistics */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"
-        >
-          {[
-            { label: 'Publications', value: '4', icon: '📄' },
-            { label: 'Citations', value: '57', icon: '📊' },
-            { label: 'H-Index', value: '3', icon: '📈' },
-            { label: 'Impact Factor', value: '2.4', icon: '⭐' },
-          ].map((stat, _) => (
-            <motion.div
-              key={stat.label}
-              variants={itemVariants}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className="bg-black/50 p-6 rounded-2xl text-center border border-gray-800 backdrop-blur-sm"
-            >
-              <div className="text-3xl mb-2">{stat.icon}</div>
-              <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-              <div className="text-gray-400 text-sm">{stat.label}</div>
-            </motion.div>
-          ))}
         </motion.div>
 
         {/* Publications list */}
