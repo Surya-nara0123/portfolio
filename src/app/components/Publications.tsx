@@ -11,56 +11,17 @@ const Publications = () => {
   const publications = [
     {
       id: 1,
-      title: 'Optimizing React Performance with Advanced Memoization Techniques',
-      authors: ['Suryanarayanan', 'Dr. Jane Smith', 'Prof. John Doe'],
-      journal: 'Journal of Web Development',
+      title: 'Enhancing Image Encryption Through Optimized Key Generation: An Analysis Using the Emperor Penguin Optimizer',
+      authors: ['Surya Narayanan C', 'Sivapriya V', 'Dr.U Padmavathi'],
+      journal: 'IEEE',
       year: 2024,
-      doi: '10.1000/journal.2024.001',
-      abstract: 'This paper explores advanced memoization techniques in React applications to significantly improve rendering performance and user experience.',
-      citations: 15,
-      category: 'Web Development',
+      doi: '10.1109/ICITIIT64777.2025.11040448',
+      abstract: 'This paper explores the use of the Emperor Penguin Optimizer for enhancing image encryption through optimized key generation techniques.',
+      citations: 0,
+      category: 'Cyber Security',
       status: 'Published',
-      link: '#'
+      link: 'https://ieeexplore.ieee.org/document/11040448'
     },
-    {
-      id: 2,
-      title: 'Machine Learning Approaches to Automated Code Review',
-      authors: ['Suryanarayanan', 'Dr. Alice Johnson'],
-      journal: 'IEEE Transactions on Software Engineering',
-      year: 2023,
-      doi: '10.1109/TSE.2023.001',
-      abstract: 'We present a novel machine learning framework for automated code review that identifies potential bugs and suggests improvements.',
-      citations: 32,
-      category: 'Machine Learning',
-      status: 'Published',
-      link: '#'
-    },
-    {
-      id: 3,
-      title: 'Scalable Microservices Architecture for E-commerce Platforms',
-      authors: ['Suryanarayanan', 'Dr. Robert Wilson', 'Prof. Sarah Davis'],
-      journal: 'ACM Computing Surveys',
-      year: 2024,
-      doi: '10.1145/survey.2024.001',
-      abstract: 'A comprehensive analysis of microservices patterns and their implementation in large-scale e-commerce systems.',
-      citations: 8,
-      category: 'System Architecture',
-      status: 'Under Review',
-      link: '#'
-    },
-    {
-      id: 4,
-      title: 'Real-time Data Synchronization in Distributed Web Applications',
-      authors: ['Suryanarayanan', 'Dr. Michael Brown'],
-      journal: 'Conference on Web Technologies (CWT 2024)',
-      year: 2024,
-      doi: 'pending',
-      abstract: 'This work addresses challenges in maintaining data consistency across distributed web applications using WebSocket and event-driven architectures.',
-      citations: 2,
-      category: 'Distributed Systems',
-      status: 'Accepted',
-      link: '#'
-    }
   ];
 
   const containerVariants = {
@@ -221,13 +182,6 @@ const Publications = () => {
                   </div>
 
                   <div className="flex flex-col items-center md:items-end gap-4 md:min-w-[120px]">
-                    <motion.div
-                      className="text-center"
-                      whileHover={{ scale: 1.1 }}
-                    >
-                      <div className="text-2xl font-bold text-indigo-400">{paper.citations}</div>
-                      <div className="text-sm text-gray-400">Citations</div>
-                    </motion.div>
 
                     <motion.div
                       className="text-center"
@@ -243,77 +197,19 @@ const Publications = () => {
                   <div className="flex flex-wrap gap-3">
                     <motion.a
                       href={paper.link}
+                      target='_blank'
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 py-2 rounded-full font-medium transition-all duration-300 flex items-center gap-2"
                     >
                       📄 Read Paper
                     </motion.a>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="border border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white px-4 py-2 rounded-full font-medium transition-all duration-300 flex items-center gap-2"
-                    >
-                      📋 Cite
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="border border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white px-4 py-2 rounded-full font-medium transition-all duration-300 flex items-center gap-2"
-                    >
-                      💾 BibTeX
-                    </motion.button>
                   </div>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
-
-        {/* Call to action */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ delay: 1.2 }}
-          className="text-center mt-16"
-        >
-          <div className="mb-6">
-            <p className="text-gray-400 mb-4">
-              Interested in collaboration or have questions about my research?
-            </p>
-            <motion.button
-              whileHover={{ 
-                scale: 1.05, 
-                boxShadow: '0 10px 30px rgba(99, 102, 241, 0.3)' 
-              }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300"
-            >
-              Contact Me for Research Collaboration
-            </motion.button>
-          </div>
-          
-          <div className="flex justify-center gap-6 text-sm text-gray-500">
-            <motion.span 
-              whileHover={{ scale: 1.1, color: '#6366f1' }}
-              className="cursor-pointer"
-            >
-              📚 Google Scholar
-            </motion.span>
-            <motion.span 
-              whileHover={{ scale: 1.1, color: '#6366f1' }}
-              className="cursor-pointer"
-            >
-              🔬 ResearchGate
-            </motion.span>
-            <motion.span 
-              whileHover={{ scale: 1.1, color: '#6366f1' }}
-              className="cursor-pointer"
-            >
-              🎓 ORCID
-            </motion.span>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
