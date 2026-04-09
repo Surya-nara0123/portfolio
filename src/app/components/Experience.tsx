@@ -10,42 +10,39 @@ const Experience = () => {
 
   const experiences = [
     {
-      title: 'Senior Full Stack Developer',
-      company: 'Tech Innovations Inc.',
-      duration: 'Jan 2023 - Present',
-      location: 'San Francisco, CA',
-      description: 'Led development of scalable web applications using React, Node.js, and AWS. Mentored junior developers and implemented CI/CD pipelines.',
-      skills: ['React', 'Node.js', 'AWS', 'PostgreSQL', 'Docker'],
+      title: 'Software Engineer',
+      company: 'AfterQuery',
+      duration: 'Oct 2025 - Present',
+      location: 'Contract Work',
+      description: 'Developing and containerizing realistic benchmark tasks for LLM training, focusing on terminal-bench implementation to enhance evaluation accuracy and reproducibility.',
+      skills: ['Docker', 'C/C++', 'Nginx', 'asciinema', 'GoLang', 'CMake'],
       achievements: [
-        'Improved application performance by 40%',
-        'Led a team of 5 developers',
-        'Implemented microservices architecture'
+        'Developed and containerized realistic benchmark tasks for LLM training using terminal-bench, enhancing evaluation accuracy and reproducibility',
+        'Designed 15+ complex engineering challenges across multiple domains (Go, C++, nginx, CMake), significantly strengthening model robustness on real-world coding tasks'
       ]
     },
     {
       title: 'Software Development Intern',
-      company: 'StartupHub',
-      duration: 'Jun 2022 - Dec 2022',
-      location: 'Remote',
-      description: 'Developed responsive web interfaces and RESTful APIs. Collaborated with cross-functional teams to deliver high-quality software solutions.',
-      skills: ['JavaScript', 'Python', 'MongoDB', 'Express.js', 'Git'],
+      company: 'Maheshwari Electrical Agency',
+      duration: 'May 2025 - Oct 2025',
+      location: 'Stipend Internship',
+      description: 'Built intelligent e-commerce solutions using Shopify, FastAPI, and React to enhance customer experience and drive engagement.',
+      skills: ['Shopify', 'FastAPI', 'React'],
       achievements: [
-        'Built 3 full-stack applications',
-        'Reduced bug reports by 25%',
-        'Implemented automated testing'
+        'Developed a product context-aware chatbot for Shopify stores to enhance customer experience and potentially reduce bounce rate by 10-15%',
+        'Implemented intelligent product recommendations with page-wise context, increasing user interaction by 15%'
       ]
     },
     {
-      title: 'Web Development Intern',
-      company: 'Digital Solutions Co.',
-      duration: 'Jan 2022 - May 2022',
-      location: 'New York, NY',
-      description: 'Focused on frontend development using modern frameworks. Participated in agile development processes and code reviews.',
-      skills: ['HTML/CSS', 'JavaScript', 'React', 'Tailwind CSS', 'Figma'],
+      title: 'Software Development Intern',
+      company: 'Dexio Designs',
+      duration: 'May 2025 - Aug 2025',
+      location: 'Stipend Internship',
+      description: 'Delivered pixel-perfect UI implementations and managed e-commerce solutions for multiple clients, focusing on accessibility and performance optimization.',
+      skills: ['Shopify', 'FastAPI', 'React', 'NextJS'],
       achievements: [
-        'Redesigned company website',
-        'Improved user engagement by 30%',
-        'Created component library'
+        'Converted Figma designs to pixel-perfect and accessible UI for Donnager AI, reducing review changes by 60% and managed wishlist and cart functionality using AJAX',
+        'Implemented Shopify theme store for premium children\'s clothing brand GINGI, reducing bounce rates by 10% and abandoned checkouts by 15%'
       ]
     }
   ];
@@ -130,9 +127,7 @@ const Experience = () => {
 
                 {/* Content */}
                 <motion.div
-                  className={`w-full md:w-5/12 ml-16 md:ml-0 ${
-                    index % 2 === 0 ? 'md:text-right' : ''
-                  }`}
+                  className="w-full md:w-5/12 ml-16 md:ml-0"
                   whileHover={{ scale: 1.02 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 >

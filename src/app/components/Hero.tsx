@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import Image from 'next/image';
 
 const Hero = () => {
   const ref = useRef(null);
@@ -95,15 +96,14 @@ const Hero = () => {
             whileHover={{ scale: 1.1, rotate: 5 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           >
-            <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
-              <img 
+            <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
+              <Image 
                 src="/profile.jpeg" 
                 alt="Profile" 
-                className="w-full h-full object-cover rounded-full"
-                onError={(e) => {
-                  e.currentTarget.src = "/placeholder.png";
-                  e.currentTarget.onerror = null;
-                }}
+                width={128}
+                height={128}
+                className="w-full h-full object-cover"
+                priority
               />
             </div>
           </motion.div>
@@ -175,13 +175,16 @@ const Hero = () => {
             <span>📄</span>
             View Resume
           </motion.button>
-          <motion.button
+          <motion.a
+            href="mailto:surya.nara0123@gmail.com"
+            target="_blank"
+            rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="border border-gray-600 hover:border-gray-400 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:bg-gray-900"
+            className="border border-gray-600 hover:border-gray-400 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:bg-gray-900 inline-block"
           >
             Get In Touch
-          </motion.button>
+          </motion.a>
         </motion.div>
       </motion.div>
     </section>

@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import Hero from './components/Hero';
 import ProfileSummary from './components/ProfileSummary';
 import Experience from './components/Experience';
@@ -21,7 +20,7 @@ export default function Home() {
         <Projects />
         <TechnicalSkills />
         <Publications />
-        <Hobbies />
+        {/* <Hobbies /> */}
       </main>
     </div>
   );

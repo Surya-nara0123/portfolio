@@ -1,18 +1,12 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 
 const Projects = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [filter, setFilter] = useState('all');
-  const [isClient, setIsClient] = useState(false);
-
-  // Fix hydration mismatch by ensuring client-side rendering for random values
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const projects = [
     {
