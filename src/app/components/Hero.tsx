@@ -1,8 +1,156 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring, useMotionValue, useAnimationFrame } from 'framer-motion';
+import { useRef, useState, useEffect, memo } from 'react';
 import Image from 'next/image';
+
+// 3D Tilt Card Component
+const TiltCard = memo(({ children, className = '' }: { children: React.ReactNode; className?: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [rotation, setRotation] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = (y - centerY) / 10;
+    const rotateY = (centerX - x) / 10;
+    setRotation({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setRotation({ x: 0, y: 0 });
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      className={`perspective-1000 ${className}`}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transformStyle: 'preserve-3d',
+      }}
+      animate={{
+        rotateX: rotation.x,
+        rotateY: rotation.y,
+      }}
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+    >
+      {children}
+    </motion.div>
+  );
+});
+
+TiltCard.displayName = 'TiltCard';
+
+// Floating Orb Component
+const FloatingOrb = ({ size, color, delay, duration, xRange }: { size: number; color: string; delay: number; duration: number; xRange: [number, number] }) => {
+  const yMotion = useMotionValue(0);
+  const xMotion = useMotionValue(xRange[0]);
+
+  useAnimationFrame((t) => {
+    yMotion.set(Math.sin(t / 1000 + delay) * 50);
+    xMotion.set(xRange[0] + (Math.sin(t / 1500 + delay) + 1) * (xRange[1] - xRange[0]) / 2);
+  });
+
+  return (
+    <motion.div
+      className={`absolute rounded-full blur-3xl ${color}`}
+      style={{
+        width: size,
+        height: size,
+        x: xMotion,
+        y: yMotion,
+      }}
+      animate={{ opacity: [0.3, 0.6, 0.3] }}
+      transition={{ duration, delay, repeat: Infinity }}
+    />
+  );
+};
+
+// Typing Animation Component
+const TypewriterText = ({ texts, speed = 100 }: { texts: string[]; speed?: number }) => {
+  const [displayText, setDisplayText] = useState('');
+  const [textIndex, setTextIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentText = texts[textIndex];
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        if (displayText.length < currentText.length) {
+          setDisplayText(currentText.slice(0, displayText.length + 1));
+        } else {
+          setTimeout(() => setIsDeleting(true), 2000);
+        }
+      } else {
+        if (displayText.length > 0) {
+          setDisplayText(displayText.slice(0, -1));
+        } else {
+          setIsDeleting(false);
+          setTextIndex((prev) => (prev + 1) % texts.length);
+        }
+      }
+    }, isDeleting ? speed / 2 : speed);
+
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, textIndex, texts, speed]);
+
+  return (
+    <span className="text-xl md:text-2xl text-gray-400">
+      {displayText}
+      <motion.span
+        animate={{ opacity: [1, 0] }}
+        transition={{ duration: 0.5, repeat: Infinity }}
+        className="inline-block w-0.5 h-6 ml-1 bg-white"
+      />
+    </span>
+  );
+};
+
+// Magnetic Button Component
+const MagneticButton = ({ children, href, primary = false }: { children: React.ReactNode; href: string; primary?: boolean }) => {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    setPosition({ x: x * 0.3, y: y * 0.3 });
+  };
+
+  const handleMouseLeave = () => {
+    setPosition({ x: 0, y: 0 });
+  };
+
+  return (
+    <motion.a
+      ref={ref}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      animate={{ x: position.x, y: position.y }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 inline-block ${
+        primary
+          ? 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50'
+          : 'bg-gray-800/80 text-white border border-gray-600 hover:border-gray-400 hover:bg-gray-700/80'
+      }`}
+    >
+      {children}
+    </motion.a>
+  );
+};
 
 const Hero = () => {
   const ref = useRef(null);
@@ -12,7 +160,23 @@ const Hero = () => {
   });
 
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springX = useSpring(mouseX, { stiffness: 100, damping: 30 });
+  const springY = useSpring(mouseY, { stiffness: 100, damping: 30 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -20,13 +184,13 @@ const Hero = () => {
       opacity: 1,
       transition: {
         duration: 0.8,
-        staggerChildren: 0.2,
+        staggerChildren: 0.15,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { y: 100, opacity: 0 },
+    hidden: { y: 80, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
@@ -37,154 +201,173 @@ const Hero = () => {
     },
   };
 
+  const roles = ['Full Stack Developer', 'Software Engineer', 'Backend Developer', 'Problem Solver'];
+
   return (
     <section
       id="home"
       ref={ref}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black"
     >
-      {/* Animated background */}
-      <div className="absolute inset-0">
-        <motion.div
-          style={{ y, opacity }}
-          className="absolute inset-0 bg-gradient-to-br from-gray-900/20 via-gray-800/20 to-gray-700/20"
+      {/* Interactive Background Gradient */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-br from-indigo-950/40 via-purple-950/40 to-pink-950/40"
+        style={{ x: springX, y: springY }}
+        animate={{ opacity: [0.8, 1, 0.8] }}
+        transition={{ duration: 4, repeat: Infinity }}
+      />
+
+      {/* Floating Orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <FloatingOrb size={400} color="bg-indigo-500/20" delay={0} duration={4} xRange={[-100, 100]} />
+        <FloatingOrb size={300} color="bg-purple-500/20" delay={1} duration={5} xRange={[50, 150]} />
+        <FloatingOrb size={350} color="bg-pink-500/20" delay={2} duration={6} xRange={[-150, -50]} />
+        <FloatingOrb size={250} color="bg-cyan-500/15" delay={3} duration={7} xRange={[100, 200]} />
+
+        {/* Grid pattern overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                             linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundSize: '50px 50px',
+          }}
         />
-        {/* Floating particles */}
-        {Array.from({ length: 50 }).map((_, i) => {
-          // Pre-calculate random values to avoid hydration mismatch
-          const xMove = i % 2 === 0 ? 50 : -50;
-          const duration = 3 + (i % 5);
-          const delay = (i % 4) * 0.5;
-          const leftPos = `${(i * 2) % 100}%`;
-          const topPos = `${(i * 3) % 100}%`;
-          
-          return (
-            <motion.div
-              key={i}
-              className="absolute w-2 h-2 bg-gray-400/30 rounded-full"
-              animate={{
-                y: [0, -100, 0],
-                x: [0, xMove, 0],
-                opacity: [0, 1, 0],
-              }}
-              transition={{
-                duration: duration,
-                repeat: Infinity,
-                delay: delay,
-              }}
-              style={{
-                left: leftPos,
-                top: topPos,
-              }}
-            />
-          );
-        })}
       </div>
+
+      {/* Mouse-following glow */}
+      <motion.div
+        className="absolute w-96 h-96 rounded-full bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 blur-3xl pointer-events-none"
+        style={{
+          x: useTransform(springX, (v) => v - 192),
+          y: useTransform(springY, (v) => v - 192),
+        }}
+      />
 
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto"
+        style={{ y, opacity, scale }}
+        className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto"
       >
-        <motion.div
-          variants={itemVariants}
-          className="mb-8"
-        >
-          <motion.div
-            className="w-32 h-32 mx-auto mb-8 rounded-full bg-gradient-to-br from-gray-600 to-gray-800 p-1"
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          >
-            <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
-              <Image 
-                src="/profile.jpeg" 
-                alt="Profile" 
-                width={128}
-                height={128}
-                className="w-full h-full object-cover"
-                priority
-              />
-            </div>
-          </motion.div>
+        {/* 3D Profile Card */}
+        <motion.div variants={itemVariants} className="mb-10">
+          <TiltCard>
+            <motion.div
+              className="relative w-40 h-40 mx-auto rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-1 shadow-2xl shadow-purple-500/30"
+              whileHover={{ scale: 1.05 }}
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <div className="w-full h-full rounded-xl bg-black flex items-center justify-center overflow-hidden">
+                <Image
+                  src="/profile.jpeg"
+                  alt="Surya Narayanan"
+                  width={160}
+                  height={160}
+                  className="w-full h-full object-cover"
+                  priority
+                />
+              </div>
+              {/* Status indicator */}
+              <motion.div
+                className="absolute -bottom-1 -right-1 w-8 h-8 bg-green-500 rounded-full border-4 border-black flex items-center justify-center"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <span className="text-xs">⚡</span>
+              </motion.div>
+            </motion.div>
+          </TiltCard>
         </motion.div>
 
-        <motion.h1
-          variants={itemVariants}
-          className="text-5xl md:text-7xl font-bold mb-6"
-        >
-          <motion.span
-            className="bg-gradient-to-r from-gray-300 via-white to-gray-300 bg-clip-text text-transparent"
+        {/* Name with 3D text effect */}
+        <motion.div variants={itemVariants} className="mb-6">
+          <motion.h1
+            className="text-5xl md:text-7xl lg:text-8xl font-black mb-2"
+            style={{ transformStyle: 'preserve-3d' }}
             animate={{
-              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+              rotateX: [0, 5, 0, -5, 0],
+              rotateY: [0, 10, 0, -10, 0],
             }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
           >
-            Suryanarayanan
-          </motion.span>
-        </motion.h1>
+            <span className="bg-gradient-to-r from-white via-ind-300 to-white bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+              Surya Narayanan
+            </span>
+          </motion.h1>
+        </motion.div>
 
+        {/* Animated role text */}
+        <motion.div variants={itemVariants} className="mb-8 min-h-[40px]">
+          <TypewriterText texts={roles} speed={80} />
+        </motion.div>
+
+        {/* Tagline */}
         <motion.p
           variants={itemVariants}
-          className="text-xl md:text-2xl text-gray-400 mb-8"
+          className="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed"
         >
-          <motion.span
-            animate={{ opacity: [1, 0.5, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            Full Stack Developer
-          </motion.span>
-          {' & '}
-          <motion.span
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-          >
-            Software Engineer
-          </motion.span>
+          Building efficient, scalable, and beautiful applications.
+          Passionate about clean code and innovative solutions.
         </motion.p>
 
-        <motion.p
-          variants={itemVariants}
-          className="text-lg text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed"
-        >
-          Passionate about creating innovative solutions and building impactful software.
-          Currently exploring the intersection of technology and creativity.
-        </motion.p>
-
+        {/* CTA Buttons */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
-          <motion.button
-            whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(255, 255, 255, 0.2)' }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 border border-gray-600"
-          >
+          <MagneticButton href="#projects" primary>
             View My Work
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => window.location.href = '/Surya_Narayanan.pdf'}
-            className="bg-gradient-to-r from-gray-800 to-black hover:from-gray-700 hover:to-gray-900 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 border border-gray-500 flex items-center gap-2"
-          >
-            <span>📄</span>
-            View Resume
-          </motion.button>
-          <motion.a
-            href="mailto:surya.nara0123@gmail.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="border border-gray-600 hover:border-gray-400 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:bg-gray-900 inline-block"
-          >
+          </MagneticButton>
+          <MagneticButton href="/Surya_Narayanan.pdf">
+            📄 Download Resume
+          </MagneticButton>
+          <MagneticButton href="mailto:surya.nara0123@gmail.com">
             Get In Touch
-          </motion.a>
+          </MagneticButton>
+        </motion.div>
+
+        {/* Social Links */}
+        <motion.div
+          variants={itemVariants}
+          className="mt-12 flex justify-center gap-6"
+        >
+          {[
+            { icon: '💻', label: 'GitHub', href: 'https://github.com/Surya-nara0123' },
+            { icon: '🔗', label: 'LinkedIn', href: 'https://linkedin.com/in/surya-narayanan' },
+            { icon: '📧', label: 'Email', href: 'mailto:surya.nara0123@gmail.com' },
+          ].map((social) => (
+            <motion.a
+              key={social.label}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.2, y: -5 }}
+              whileTap={{ scale: 0.9 }}
+              className="w-12 h-12 rounded-full bg-gray-800/50 border border-gray-700 flex items-center justify-center text-xl hover:bg-gray-700/50 hover:border-gray-500 transition-all duration-300"
+              title={social.label}
+            >
+              {social.icon}
+            </motion.a>
+          ))}
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          variants={itemVariants}
+          className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="w-6 h-10 rounded-full border-2 border-gray-600 flex items-start justify-center p-2">
+            <motion.div
+              className="w-1.5 h-3 bg-gray-400 rounded-full"
+              animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+          </div>
         </motion.div>
       </motion.div>
     </section>

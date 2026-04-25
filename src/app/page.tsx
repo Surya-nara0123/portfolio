@@ -6,8 +6,8 @@ import Experience from './components/Experience';
 import Projects from './components/Projects';
 import TechnicalSkills from './components/TechnicalSkills';
 import Publications from './components/Publications';
-import Hobbies from './components/Hobbies';
 import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 
 export default function Home() {
   return (
@@ -20,8 +20,8 @@ export default function Home() {
         <Projects />
         <TechnicalSkills />
         <Publications />
-        {/* <Hobbies /> */}
       </main>
+      <Footer />
     </div>
   );
 }
