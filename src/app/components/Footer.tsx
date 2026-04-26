@@ -131,7 +131,7 @@ const Footer = () => {
               surya.nara0123@gmail.com
             </motion.a>
             <p className="text-gray-500 text-xs mt-4">
-              Saveetha Engineering College
+              Shiv Nadar University Chennai
               <br />
               Chennai, India
             </p>

@@ -262,7 +262,7 @@ const ProfileSummary = () => {
               </div>
 
               <p className="text-gray-300 leading-relaxed mb-4 text-lg">
-                I&apos;m <span className="text-white font-semibold">Surya Narayanan</span>, a passionate Full Stack Developer currently pursuing my B.Tech in Computer Science at Saveetha Engineering College (graduating 2027).
+                I&apos;m <span className="text-white font-semibold">Surya Narayanan</span>, a passionate Full Stack Developer currently pursuing my B.Tech in Computer Science at Shiv Nadar University Chennai (graduating 2027).
               </p>
               <p className="text-gray-400 leading-relaxed">
                 I specialize in building scalable web applications and exploring the intersection of technology and creativity. My journey involves continuous learning and creating impactful software solutions.
@@ -369,7 +369,7 @@ const ProfileSummary = () => {
               <span className="text-4xl">🎓</span>
               <div>
                 <h4 className="text-xl font-bold text-white">B.Tech Computer Science</h4>
-                <p className="text-gray-400">Saveetha Engineering College</p>
+                <p className="text-gray-400">Shiv Nadar University Chennai</p>
                 <p className="text-gray-500 text-sm">Expected Graduation: 2027</p>
               </div>
             </div>
