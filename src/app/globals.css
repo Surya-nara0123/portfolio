@@ -39,23 +39,6 @@ html {
   scroll-behavior: smooth;
 }
 
-/* 3D perspective utilities */
-.perspective-1000 {
-  perspective: 1000px;
-}
-
-.perspective-1500 {
-  perspective: 1500px;
-}
-
-.preserve-3d {
-  transform-style: preserve-3d;
-}
-
-.backface-hidden {
-  backface-visibility: hidden;
-}
-
 /* Selection color */
 ::selection {
   background: rgba(139, 92, 246, 0.4);
@@ -69,83 +52,11 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
-/* Loading animation */
-@keyframes shimmer {
-  0% {
-    background-position: -468px 0;
-  }
-  100% {
-    background-position: 468px 0;
-  }
-}
-
-.shimmer {
-  animation: shimmer 2s infinite linear;
-  background: linear-gradient(to right, #1f1f1f 8%, #2d2d2d 18%, #1f1f1f 33%);
-  background-size: 800px 104px;
-}
-
-/* Glow effects */
-.glow-purple {
-  box-shadow: 0 0 40px rgba(139, 92, 246, 0.3);
-}
-
-.glow-blue {
-  box-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
-}
-
-.glow-pink {
-  box-shadow: 0 0 40px rgba(236, 72, 153, 0.3);
-}
-
-/* Glassmorphism */
+/* Glass effect */
 .glass {
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Gradient text animation */
-@keyframes gradient-shift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.gradient-animated {
-  background-size: 200% 200%;
-  animation: gradient-shift 5s ease infinite;
-}
-
-/* Floating animation */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-.float {
-  animation: float 6s ease-in-out infinite;
-}
-
-/* Pulse glow */
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
-  }
-}
-
-.pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
 }
 
 /* Text shadow */
@@ -176,22 +87,6 @@ a:focus-visible {
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
-}
-
-/* Smooth reveal animations */
-@keyframes reveal-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.reveal-up {
-  animation: reveal-up 0.8s ease-out forwards;
 }
 
 /* Responsive typography */
@@ -227,7 +122,7 @@ a {
   text-decoration: none;
 }
 
-/* Reduced motion */
+/* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

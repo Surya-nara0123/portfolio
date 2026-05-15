@@ -1,13 +1,13 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef, useState, memo } from 'react';
+import { useRef, memo } from 'react';
 
-// Animated Gradient Border
+// Simple animated border on hover
 const AnimatedBorder = memo(({ children, className = '' }: { children: React.ReactNode; className?: string }) => {
   return (
     <div className={`relative group ${className}`}>
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-30 group-hover:opacity-60 transition-opacity duration-500" />
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-500" />
       <div className="relative">{children}</div>
     </div>
   );
@@ -18,7 +18,6 @@ AnimatedBorder.displayName = 'AnimatedBorder';
 const Publications = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const [hoveredPaper, setHoveredPaper] = useState<number | null>(null);
 
   const publications = [
     {
@@ -47,30 +46,16 @@ const Publications = () => {
   };
 
   const itemVariants = {
-    hidden: { y: 60, opacity: 0 },
+    hidden: { y: 30, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] as const },
+      transition: { duration: 0.6 },
     },
   };
 
   return (
-    <section id="publications" className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-black via-gray-950 to-black relative overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity, delay: 4 }}
-        />
-      </div>
-
+    <section id="publications" className="py-24 px-4 sm:px-6 lg:px-8 bg-black relative">
       <div className="max-w-5xl mx-auto relative z-10">
         <motion.div
           ref={ref}
@@ -108,66 +93,40 @@ const Publications = () => {
               initial="hidden"
               animate={isInView ? 'visible' : 'hidden'}
               transition={{ delay: index * 0.2 }}
-              onMouseEnter={() => setHoveredPaper(index)}
-              onMouseLeave={() => setHoveredPaper(null)}
               className="group"
             >
               <AnimatedBorder>
-                <motion.div
-                  className="relative bg-gray-950/90 p-8 md:p-10 rounded-2xl border border-gray-800 backdrop-blur-sm overflow-hidden transition-all duration-500"
-                  whileHover={{ scale: 1.01 }}
-                >
+                <div className="relative bg-gray-950/90 p-8 md:p-10 rounded-2xl border border-gray-800 backdrop-blur-sm overflow-hidden transition-all duration-500">
                   {/* Gradient accent on hover */}
-                  <motion.div
-                    className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${paper.color}`}
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: hoveredPaper === index ? 1 : 0 }}
-                    transition={{ duration: 0.5 }}
-                  />
+                  <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${paper.color} scale-x-0 group-hover:scale-x-100 transition-transform duration-500`} />
 
                   <div className="flex flex-col lg:flex-row lg:items-start gap-6">
                     {/* Icon */}
-                    <motion.div
-                      animate={hoveredPaper === index ? { scale: 1.1, rotate: 5 } : {}}
-                      className="flex-shrink-0"
-                    >
+                    <div className="flex-shrink-0">
                       <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${paper.color} flex items-center justify-center text-3xl shadow-lg`}>
                         {paper.icon}
                       </div>
-                    </motion.div>
+                    </div>
 
                     {/* Content */}
                     <div className="flex-1 space-y-4">
                       {/* Status badges */}
                       <div className="flex flex-wrap gap-2">
-                        <motion.span
-                          className={`px-4 py-1.5 rounded-full text-sm font-semibold bg-gradient-to-r ${paper.color} text-white`}
-                          whileHover={{ scale: 1.05 }}
-                        >
+                        <span className={`px-4 py-1.5 rounded-full text-sm font-semibold bg-gradient-to-r ${paper.color} text-white`}>
                           ✓ {paper.status}
-                        </motion.span>
-                        <motion.span
-                          className="px-4 py-1.5 rounded-full text-sm font-medium bg-gray-800 text-gray-300 border border-gray-700"
-                          whileHover={{ scale: 1.05 }}
-                        >
+                        </span>
+                        <span className="px-4 py-1.5 rounded-full text-sm font-medium bg-gray-800 text-gray-300 border border-gray-700">
                           {paper.category}
-                        </motion.span>
-                        <motion.span
-                          className="px-4 py-1.5 rounded-full text-sm font-medium bg-gray-800 text-gray-300 border border-gray-700"
-                          whileHover={{ scale: 1.05 }}
-                        >
+                        </span>
+                        <span className="px-4 py-1.5 rounded-full text-sm font-medium bg-gray-800 text-gray-300 border border-gray-700">
                           📅 {paper.year}
-                        </motion.span>
+                        </span>
                       </div>
 
                       {/* Title */}
-                      <motion.h3
-                        className="text-xl md:text-2xl font-bold text-white leading-tight"
-                        animate={hoveredPaper === index ? { x: 5 } : {}}
-                        transition={{ duration: 0.3 }}
-                      >
+                      <h3 className="text-xl md:text-2xl font-bold text-white leading-tight">
                         {paper.title}
-                      </motion.h3>
+                      </h3>
 
                       {/* Authors */}
                       <p className="text-gray-400">
@@ -176,61 +135,48 @@ const Publications = () => {
                       </p>
 
                       {/* Abstract */}
-                      <motion.p
-                        className="text-gray-300 leading-relaxed"
-                        animate={hoveredPaper === index ? { opacity: 1 } : { opacity: 0.8 }}
-                      >
+                      <p className="text-gray-300 leading-relaxed">
                         {paper.abstract}
-                      </motion.p>
+                      </p>
 
                       {/* DOI and Links */}
                       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center pt-4 border-t border-gray-800">
                         <p className="text-sm text-gray-500">
                           <span className="text-gray-400">DOI:</span>{' '}
-                          <motion.a
+                          <a
                             href={paper.link}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-indigo-400 hover:text-indigo-300 hover:underline"
-                            whileHover={{ scale: 1.02 }}
                           >
                             {paper.doi}
-                          </motion.a>
+                          </a>
                         </p>
 
                         <div className="flex gap-3 sm:ml-auto">
-                          <motion.a
+                          <a
                             href={paper.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            whileTap={{ scale: 0.95 }}
                             className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl font-medium shadow-lg transition-all duration-300"
                           >
                             <span>📄</span>
                             Read Paper
-                          </motion.a>
-                          <motion.a
+                          </a>
+                          <a
                             href={`https://scholar.google.com/scholar?q=${encodeURIComponent(paper.title)}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            whileTap={{ scale: 0.95 }}
                             className="flex items-center gap-2 px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-white rounded-xl font-medium border border-gray-700 transition-all duration-300"
                           >
                             <span>📚</span>
                             Google Scholar
-                          </motion.a>
+                          </a>
                         </div>
                       </div>
                     </div>
                   </div>
-
-                  {/* Animated glow */}
-                  <motion.div
-                    className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${paper.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500 -z-10`}
-                  />
-                </motion.div>
+                </div>
               </AnimatedBorder>
             </motion.div>
           ))}
@@ -238,13 +184,13 @@ const Publications = () => {
 
         {/* Coming Soon */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.6 }}
           className="mt-12 text-center"
         >
           <div className="inline-flex items-center gap-3 px-6 py-3 bg-gray-900/50 rounded-full border border-gray-800">
-            <span className="text-2xl animate-pulse">🔬</span>
+            <span className="text-2xl">🔬</span>
             <span className="text-gray-400">More publications coming soon...</span>
           </div>
         </motion.div>
